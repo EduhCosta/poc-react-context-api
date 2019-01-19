@@ -1,26 +1,32 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+
+// Components
+import { ContainerList } from './components'
+// Service
+import { getUsers } from './core-service'
+// Context
+import CoreContext from './Context';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  componentDidMount = () => {
+    this.getUsers()
+  }
+
+  getUsers = async () => {
+    const users = await getUsers().then(res => res)
+    this.setState({ users })
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <CoreContext.Provider value={{ ...this.state }}>
+        <ContainerList />
+      </CoreContext.Provider>
     );
   }
 }
